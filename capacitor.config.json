@@ -4,13 +4,14 @@
   "webDir": "www",
   "android": {
     "allowMixedContent": false,
-    "backgroundColor": "#0f0f12"
+    "backgroundColor": "#222222"
   },
   "plugins": {
     "SplashScreen": {
-      "launchShowDuration": 300,
-      "backgroundColor": "#0f0f12",
-      "androidScaleType": "CENTER_CROP"
+      "launchShowDuration": 0,
+      "backgroundColor": "#222222",
+      "androidScaleType": "CENTER_CROP",
+      "showSpinner": false
     }
   }
 }

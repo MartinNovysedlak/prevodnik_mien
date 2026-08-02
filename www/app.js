@@ -47,6 +47,8 @@
     favorites: [],         // obľúbené meny (kódy)
     defaultFrom: "CZK",    // default zdrojová mena
     defaultTo: "EUR",      // default cieľová mena
+    lastFrom: null,        // posledná zdrojová mena (perzistencia medzi spusteniami)
+    lastTo: null,          // posledná cieľová mena
   };
 
   // Načítanie obľúbených z localStorage (mimo settings pre rýchly prístup)
@@ -93,6 +95,20 @@
     try {
       localStorage.setItem("pm_settings", JSON.stringify(state.settings));
     } catch (e) {}
+  }
+
+  // ====== PERZISTENCIA POSLEDNÝCH MIEN ======
+  function saveLastCurrencies() {
+    try {
+      localStorage.setItem("pm_last", JSON.stringify({ from: state.from, to: state.to }));
+    } catch (e) {}
+  }
+  function loadLastCurrencies() {
+    try {
+      const data = JSON.parse(localStorage.getItem("pm_last") || "null");
+      if (data && data.from && data.to) return data;
+    } catch (e) {}
+    return null;
   }
 
   // ====== APLIKÁCIA TÉMY ======
@@ -444,6 +460,7 @@
     const prevOut = parseFloat(String(prevOutText).replace(/\s/g, "").replace(",", "."));
     if (!isNaN(prevOut) && prevOut > 0) state.expr = cleanNumStr(prevOut);
     state.freshInput = true;
+    saveLastCurrencies();
     el.swapBtn.classList.remove("flipped");
     void el.swapBtn.offsetWidth;
     el.swapBtn.classList.add("animating");
@@ -565,6 +582,7 @@
         vibrate(10);
         if (state.selectTarget === "from") state.from = code;
         else if (state.selectTarget === "to") state.to = code;
+        saveLastCurrencies();
         show("main");
         renderMain();
       });
@@ -766,16 +784,21 @@
 
   // ====== INIT ======
   async function init() {
-    // Pri štarte použi predvolenú zdrojovú menu z nastavení
-    if (state.settings.defaultFrom && window.CURRENCY_MAP[state.settings.defaultFrom]) {
+    // Pri štarte: najprv posledne použité meny (priorita), inak predvolená
+    const last = loadLastCurrencies();
+    if (last && window.CURRENCY_MAP[last.from] && window.CURRENCY_MAP[last.to]) {
+      state.from = last.from;
+      state.to = last.to;
+    } else if (state.settings.defaultFrom && window.CURRENCY_MAP[state.settings.defaultFrom]) {
       state.from = state.settings.defaultFrom;
     }
     applyTheme();
     bindEvents();
+    // Najprv načítame cache a zobrazíme UI OKAMŽITE (bez čakania na sieť)
     loadCache();
     renderMain();
-    await refreshRates();
-    renderMain();
+    // Aktualizácia kurzov na pozadí (nezdržuje štart appky)
+    refreshRates().then(() => renderMain());
   }
 
   if (document.readyState === "loading") {
