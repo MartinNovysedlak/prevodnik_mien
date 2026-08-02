@@ -1,0 +1,22 @@
+# Závislosti
+node_modules/
+package-lock.json
+
+# Build artefakty
+android/app/build/
+android/.gradle/
+android/build/
+android/local.properties
+android/app/release/
+build/
+dist/
+
+# IDE / OS
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
+
+# Capacitor
+android/app/capacitor.build.gradle

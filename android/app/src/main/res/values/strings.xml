@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Prevodník mien</string>
+    <string name="title_activity_main">Prevodník mien</string>
+    <string name="package_name">com.prevodnikmien.app</string>
+    <string name="custom_url_scheme">com.prevodnikmien.app</string>
+</resources>

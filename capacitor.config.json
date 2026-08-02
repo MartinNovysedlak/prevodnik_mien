@@ -1,0 +1,16 @@
+{
+  "appId": "com.prevodnikmien.app",
+  "appName": "Prevodník mien",
+  "webDir": "www",
+  "android": {
+    "allowMixedContent": false,
+    "backgroundColor": "#0f0f12"
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 300,
+      "backgroundColor": "#0f0f12",
+      "androidScaleType": "CENTER_CROP"
+    }
+  }
+}

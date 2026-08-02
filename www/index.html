@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#222222" />
+  <title>Prevodník mien</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- ========== HLAVNÁ OBRAZOVKA (KALKULAČKA) ========== -->
+  <div id="main-screen" class="screen active">
+    <div class="status-bar-spacer"></div>
+
+    <!-- HORNÁ SEKCIA: zdrojová mena -->
+    <div class="currency-section top-section" data-slot="from">
+      <div class="currency-left">
+        <div class="flag-circle" id="from-flag" style="background-image:url('flags/cz.png')"></div>
+        <div class="currency-code" id="from-code">CZK</div>
+      </div>
+      <div class="amount-text" id="from-amount">2 850</div>
+    </div>
+
+    <!-- Deliaca čiara s prepínačom (swap) -->
+    <div class="divider-row">
+      <div class="divider-line"></div>
+      <button class="swap-btn" id="swap-btn" aria-label="Prepnúť smer prevodu">
+        <svg viewBox="0 0 24 24"><path d="M7 10l5-5 5 5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M17 14l-5 5-5-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+
+    <!-- SEKCIA: cieľová mena -->
+    <div class="currency-section bottom-section" data-slot="to">
+      <div class="currency-left">
+        <div class="flag-circle" id="to-flag" style="background-image:url('flags/eu.png')"></div>
+        <div class="currency-code" id="to-code">EUR</div>
+      </div>
+      <div class="amount-text result" id="to-amount">117,61</div>
+    </div>
+
+    <!-- KLÁVESNICA 5×4 -->
+    <div class="keypad-wrap">
+      <div class="keypad" id="keypad">
+        <!-- Riadok 1 -->
+        <button class="key key-fn" data-key="C">C</button>
+        <button class="key key-fn" data-key="⌫">
+          <svg viewBox="0 0 24 24"><path d="M22 3H7c-.69 0-1.23.35-1.59.88L0 12l5.41 8.11c.36.53.9.89 1.59.89h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-3 12.59L17.59 17 14 13.41 10.41 17 9 15.59 12.59 12 9 8.41 10.41 7 14 10.59 17.59 7 19 8.41 15.41 12 19 15.59z"/></svg>
+        </button>
+        <button class="key key-fn" data-key="swap">⇅</button>
+        <button class="key key-op" data-key="÷">÷</button>
+
+        <!-- Riadok 2 -->
+        <button class="key key-num" data-key="7">7</button>
+        <button class="key key-num" data-key="8">8</button>
+        <button class="key key-num" data-key="9">9</button>
+        <button class="key key-op" data-key="×">×</button>
+
+        <!-- Riadok 3 -->
+        <button class="key key-num" data-key="4">4</button>
+        <button class="key key-num" data-key="5">5</button>
+        <button class="key key-num" data-key="6">6</button>
+        <button class="key key-op" data-key="−">−</button>
+
+        <!-- Riadok 4 -->
+        <button class="key key-num" data-key="1">1</button>
+        <button class="key key-num" data-key="2">2</button>
+        <button class="key key-num" data-key="3">3</button>
+        <button class="key key-op" data-key="+">+</button>
+
+        <!-- Riadok 5 -->
+        <button class="key key-num" data-key="%">%</button>
+        <button class="key key-num" data-key="0">0</button>
+        <button class="key key-num" data-key=".">,</button>
+        <button class="key key-eq" data-key="=">=</button>
+      </div>
+    </div>
+
+    <!-- SPODNÁ LIŠTA -->
+    <div class="bottom-bar">
+      <button class="bar-btn" id="bar-refresh" aria-label="Obnoviť kurzy">
+        <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.96 7.96 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z" fill="currentColor"/></svg>
+      </button>
+      <div class="bar-center">
+        <div class="rate-text" id="rate-info">1 EUR = 24,23 CZK</div>
+        <div class="status-text" id="updated-info">Práve teraz</div>
+      </div>
+      <button class="bar-btn" id="bar-info" aria-label="Nastavenia">
+        <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94 0 .31.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" fill="currentColor"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ========== OBRAZOVKA VÝBERU MENY ========== -->
+  <div id="currency-screen" class="screen">
+    <div class="status-bar-spacer"></div>
+    <div class="select-header">
+      <button class="header-btn" id="back-btn" aria-label="Späť">
+        <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <h1 class="select-title">Meny</h1>
+      <button class="header-btn" id="refresh-btn" aria-label="Obnoviť kurzy">
+        <svg viewBox="0 0 24 24" id="refresh-icon"><path d="M17.65 6.35A7.96 7.96 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z" fill="currentColor"/></svg>
+      </button>
+    </div>
+    <div class="search-wrap">
+      <svg class="search-icon" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" fill="currentColor"/></svg>
+      <input type="text" id="search-input" class="search-input" placeholder="Hľadať menu" autocomplete="off" />
+    </div>
+    <div class="currency-list" id="currency-list"></div>
+  </div>
+
+  <!-- ========== OBRAZOVKA NASTAVENIA ========== -->
+  <div id="settings-screen" class="screen">
+    <div class="status-bar-spacer"></div>
+    <div class="select-header">
+      <button class="header-btn" id="settings-back-btn" aria-label="Späť">
+        <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <h1 class="select-title">Nastavenia</h1>
+      <div style="width:42px"></div>
+    </div>
+
+    <div class="settings-scroll">
+      <!-- PREDVOLNENÁ MENA -->
+      <div class="settings-group">
+        <div class="group-title">Predvolená zdrojová mena</div>
+        <div class="select-row" id="default-from-row">
+          <select class="currency-select" id="default-from-select"></select>
+        </div>
+        <div class="hint-text">Táto mena bude vždy hore v zozname a pri štarte appky.</div>
+      </div>
+
+      <!-- FARBA APLIKÁCIE -->
+      <div class="settings-group">
+        <div class="group-title">Farba aplikácie</div>
+        <div class="color-swatches" id="color-swatches"></div>
+      </div>
+
+      <!-- AKCENT (operátory) -->
+      <div class="settings-group">
+        <div class="group-title">Farba tlačidiel operátorov</div>
+        <div class="color-swatches" id="accent-swatches"></div>
+      </div>
+
+      <!-- FARBA VÝSLEDKU -->
+      <div class="settings-group">
+        <div class="group-title">Farba prepočítanej meny</div>
+        <div class="style-options" id="result-mode-options">
+          <button class="style-opt" data-resultmode="accent">Podľa témy<span class="style-hint">Farba operátorov</span></button>
+          <button class="style-opt" data-resultmode="white">Biela<span class="style-hint">Rovnaká ako vstup</span></button>
+          <button class="style-opt" data-resultmode="custom">Vlastná farba</button>
+        </div>
+        <div class="color-swatches" id="result-swatches" style="margin-top:10px"></div>
+      </div>
+
+      <!-- ŠTÝL KLÁVESNICE -->
+      <div class="settings-group">
+        <div class="group-title">Štýl klávesnice</div>
+        <div class="style-options" id="style-options">
+          <button class="style-opt" data-style="classic">Klasický<span class="style-hint">Plné bloky</span></button>
+          <button class="style-opt" data-style="rounded">Zaoblený<span class="style-hint">Gombíky</span></button>
+          <button class="style-opt" data-style="flat">Plochý<span class="style-hint">S tenkými medzerami</span></button>
+          <button class="style-opt" data-style="circle">Kružky<span class="style-hint">Okrúhle tlačidlá</span></button>
+        </div>
+      </div>
+
+      <!-- VEĽKOSŤ KLÁVESNICE -->
+      <div class="settings-group">
+        <div class="group-title">Hustota klávesnice</div>
+        <div class="style-options" id="density-options">
+          <button class="style-opt" data-density="compact">Kompaktná</button>
+          <button class="style-opt" data-density="comfortable">Pohodlná</button>
+          <button class="style-opt" data-density="spacious">Priestorná</button>
+        </div>
+      </div>
+
+      <!-- VEĽKOSŤ ČÍSEL -->
+      <div class="settings-group">
+        <div class="group-title">Veľkosť čísel</div>
+        <div class="style-options" id="amount-options">
+          <button class="style-opt" data-amount="small">Malé</button>
+          <button class="style-opt" data-amount="normal">Normálne</button>
+          <button class="style-opt" data-amount="large">Veľké</button>
+        </div>
+      </div>
+
+      <!-- HRÚBKA PÍSMA -->
+      <div class="settings-group">
+        <div class="group-title">Hrúbka písma čísel</div>
+        <div class="style-options" id="weight-options">
+          <button class="style-opt" data-weight="normal">Normálne</button>
+          <button class="style-opt" data-weight="medium">Stredné</button>
+          <button class="style-opt" data-weight="bold">Hrubé</button>
+        </div>
+      </div>
+
+      <!-- HAPTICKÁ ODOZVA -->
+      <div class="settings-group">
+        <label class="toggle-row">
+          <span>Vibračná odozva pri stlačení</span>
+          <span class="toggle" id="haptics-toggle"><span class="toggle-knob"></span></span>
+        </label>
+      </div>
+
+      <!-- PREPÍNAČ SMERU (ŠÍPKY) -->
+      <div class="settings-group">
+        <label class="toggle-row">
+          <span>Zobrazovať šípky (prepínač smeru)</span>
+          <span class="toggle" id="swap-toggle"><span class="toggle-knob"></span></span>
+        </label>
+      </div>
+
+      <div class="settings-group about">
+        <div class="about-line"><strong>Prevodník mien</strong></div>
+        <div class="about-line">Verzia 1.1</div>
+        <div class="about-line" id="data-source-line">Kurzy: open.er-api.com</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INDICÁTOR -->
+  <div class="net-badge" id="net-badge">Online</div>
+
+  <script src="currencies.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
