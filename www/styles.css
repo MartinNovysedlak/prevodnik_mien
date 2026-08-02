@@ -237,7 +237,7 @@ body[data-swap="off"] .swap-btn {
 .keypad-wrap {
   flex: 1;
   display: flex;
-  align-items: flex-end;   /* klávesnica pripegovaná nadol ku spodnej lište */
+  align-items: flex-end;   /* kompaktná/pohodlná pripegované nadol ku spodnej lište */
   min-height: 0;
 }
 .keypad {
@@ -250,9 +250,15 @@ body[data-swap="off"] .swap-btn {
   padding-bottom: 0;
   margin-top: auto;        /* zarovná nadol aj pri menšej klávesnici */
 }
-/* Priestorná hustota: riadky sa roztiahnu a vyplnia priestor po spodný riadok */
+/* Priestorná hustota: klávesnica vyplní CELÝ priestor od spodku takmer po prvý riadok,
+   bez medzier — tlačidlá sa roztiahnu na dostupnú výšku */
+body[data-density="spacious"] .keypad-wrap {
+  align-items: stretch;    /* kontajner sa roztiahne */
+}
 body[data-density="spacious"] .keypad {
-  grid-template-rows: repeat(5, 1fr);
+  grid-template-rows: repeat(5, 1fr);  /* riadky rovnomerne vyplnia výšku */
+  margin-top: 0;                        /* žiadny voľný priestor hore */
+  height: 100%;                         /* vyplní celý kontajner */
 }
 .key {
   border: none;
