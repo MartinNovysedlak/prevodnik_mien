@@ -1,6 +1,10 @@
 (function () {
   "use strict";
 
+  // Okamžite nastavíme tmavé pozadie (zamedzí blikaniu bielej WebView pri štarte)
+  document.documentElement.style.background = "#222222";
+  document.body && (document.body.style.background = "#222222");
+
   // ====== PREDVOLBENÉ TÉMY ======
   const BG_THEMES = [
     { id: "dark",   bg: "#222222", fn: "#484848", num: "#636363", label: "Tmavá" },
@@ -792,6 +796,11 @@
     } else if (state.settings.defaultFrom && window.CURRENCY_MAP[state.settings.defaultFrom]) {
       state.from = state.settings.defaultFrom;
     }
+    // Studený štart = nová relácia: reset výrazu, ďalšie číslo začne od nuly (bez C)
+    state.expr = "0";
+    state.operator = null;
+    state.operand = null;
+    state.freshInput = true;
     applyTheme();
     bindEvents();
     // Najprv načítame cache a zobrazíme UI OKAMŽITE (bez čakania na sieť)

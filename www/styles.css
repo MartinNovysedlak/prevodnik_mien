@@ -144,7 +144,7 @@ input {
   border-radius: 50%;
   flex-shrink: 0;
   background-color: rgba(255,255,255,0.08);
-  background-size: cover;
+  background-size: 100% 100%;   /* vlajka presne vyplní celý kruh */
   background-position: center;
   background-repeat: no-repeat;
   box-shadow: 0 0 0 2px rgba(0,0,0,0.25), 0 3px 8px rgba(0,0,0,0.3);
