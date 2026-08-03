@@ -144,11 +144,14 @@ input {
   border-radius: 50%;
   flex-shrink: 0;
   background-color: rgba(255,255,255,0.08);
-  background-size: 100% 100%;   /* vlajka presne vyplní celý kruh */
+  background-size: 100% 100%;
   background-position: center;
   background-repeat: no-repeat;
-  box-shadow: 0 0 0 2px rgba(0,0,0,0.25), 0 3px 8px rgba(0,0,0,0.3);
-  border: 2px solid rgba(255,255,255,0.15);
+  background-origin: border-box;   /* vlajka vyplní vrátane border oblasti */
+  background-clip: border-box;
+  /* vonkajší prsteň + tieň mimo vlajky (nezaberá miesto vo vnútri) */
+  box-shadow: 0 0 0 2px rgba(0,0,0,0.35), 0 3px 8px rgba(0,0,0,0.3);
+  border: 2px solid rgba(255,255,255,0.12);
 }
 .currency-code {
   font-size: 14px;
